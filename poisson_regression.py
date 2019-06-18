@@ -6,7 +6,7 @@ import scipy.optimize
 
 
 # 今回使用するデータ
-data = pd.read_csv('./data3a.csv')
+data = pd.read_csv('./psn_data.csv')
 
 
 ## 答え ##################################################
@@ -19,14 +19,15 @@ a, b = results.params
 ## 自作 ####################################################
 params = [np.random.rand(), np.random.rand()]
 
-def likelihood(params, y_vector):
+def likelihood(params, y_vector, x_vector):
     ret = 0
+    # ポアソン分布のパラメータ
+    theta_reg = lambda params, x: np.exp(params[0] + params[1]*x)
     for i in range(y_vector.shape[0]):
-        theta_reg = lambda params: np.exp(params[0] + params[1]*data['x'][i])
-        ret += y_vector[i] * np.log(theta_reg(params)) - theta_reg(params)
+        ret += y_vector[i] * np.log(theta_reg(params, x_vector[i])) - theta_reg(params, x_vector[i])
     return -ret
 
-new_params = scipy.optimize.minimize(likelihood, params, args=(data['y']))
+new_params = scipy.optimize.minimize(likelihood, params, args=(data['y'], data['x']))
 
 print("自作で推定した結果")
 print(list(new_params.x))
