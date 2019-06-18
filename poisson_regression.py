@@ -6,7 +6,7 @@ import scipy.optimize
 
 
 # 今回使用するデータ
-data = pd.read_csv('./psn_data.csv')
+data = pd.read_csv('./data3a.csv')
 
 
 ## 答え ##################################################
